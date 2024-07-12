@@ -14,14 +14,42 @@
         state: present
     - name: create a system user tomcat
       ansible.builtin.user:
-        name: t"{{ user_name }}"
+        name: "{{ user_name }}"
         create_home: true
         group: "{{ group_name }}"
-        home: /"{{ home_dir }}"
+        home: "{{ home_dir }}"
         shell: "{{ default_shell }}" 
         state: present
     - name: download tomcat  
       ansible.builtin.get_url:
         url: https://www-eu.apache.org/dist/tomcat/tomcat-10/v"{{ tomcat_version }}"/bin/apache-tomcat-"{{ tomcat_version }}".tar.gz -P /tmp
         dest: /tmp/apache-tomcat-"{{ tomcat_version }}".tar.gz 
+    - name: download and extract tomcat
+      ansible.builtin.unarchive:
+        src: https://www-eu.apache.org/dist/tomcat/tomcat-10/v"{{ tomcat_version }}"/bin/apache-tomcat-"{{ tomcat_version }}".tar.gz -P /tmp
+        dest: "{{ home_dir }}"
+        remote_src: yes    
+    - name: Create a symbolic link
+      ansible.builtin.file:
+        src: "{{ home_dir }}/apache-tomcat-{{ tomcat_version }}"
+        dest: "{{ home_dir }}/latest"
+        owner: "{{ user_name }}"
+        group: "{{ group_name }}"
+        state: link    
+    - name: Change file ownership, group and permissions
+      ansible.builtin.file: 
+        path: "{{ home_dir }}"
+        owner: "{{ user_name }}"
+        group: "{{ group_name }}"
+    - name: give permissions to the shell
+      ansible.builtin.shell:
+        cmd: "chmod +x /opt/tomcat/latest/bin/*.sh"
+        executable: "/bin/bash"
+    - name: create a service file
+      ansible.builtin.copy:
+      
+
+
+
+
         
