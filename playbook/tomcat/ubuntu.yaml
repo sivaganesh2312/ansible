@@ -8,27 +8,7 @@
         name: "{{ java_package }}"
         state: present
         update_cache: true
-    - name: create a system group tomcat
-      ansible.builtin.group:
-        name: "{{ group_name }}"
-        state: present
-    - name: create a system user tomcat
-      ansible.builtin.user:
-        name: "{{ user_name }}"
-        create_home: true
-        group: "{{ group_name }}"
-        home: "{{ home_dir }}"
-        shell: "{{ default_shell }}" 
-        state: present
-    - name: download tomcat  
-      ansible.builtin.get_url:
-        url: https://www-eu.apache.org/dist/tomcat/tomcat-10/v"{{ tomcat_version }}"/bin/apache-tomcat-"{{ tomcat_version }}".tar.gz -P /tmp
-        dest: /tmp/apache-tomcat-"{{ tomcat_version }}".tar.gz 
-    - name: download and extract tomcat
-      ansible.builtin.unarchive:
-        src: https://www-eu.apache.org/dist/tomcat/tomcat-10/v"{{ tomcat_version }}"/bin/apache-tomcat-"{{ tomcat_version }}".tar.gz -P /tmp
-        dest: "{{ home_dir }}"
-        remote_src: yes    
+    -  
   
       
 
