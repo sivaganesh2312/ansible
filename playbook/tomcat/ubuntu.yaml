@@ -29,24 +29,7 @@
         src: https://www-eu.apache.org/dist/tomcat/tomcat-10/v"{{ tomcat_version }}"/bin/apache-tomcat-"{{ tomcat_version }}".tar.gz -P /tmp
         dest: "{{ home_dir }}"
         remote_src: yes    
-    - name: Create a symbolic link
-      ansible.builtin.file:
-        src: "{{ home_dir }}/apache-tomcat-{{ tomcat_version }}"
-        dest: "{{ home_dir }}/latest"
-        owner: "{{ user_name }}"
-        group: "{{ group_name }}"
-        state: link    
-    - name: Change file ownership, group and permissions
-      ansible.builtin.file: 
-        path: "{{ home_dir }}"
-        owner: "{{ user_name }}"
-        group: "{{ group_name }}"
-    - name: give permissions to the shell
-      ansible.builtin.shell:
-        cmd: "chmod +x /opt/tomcat/latest/bin/*.sh"
-        executable: "/bin/bash"
-    - name: create a service file
-      ansible.builtin.copy:
+  
       
 
 
