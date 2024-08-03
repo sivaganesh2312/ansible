@@ -22,7 +22,7 @@
         state: present
     - name: downloading tomcat
       ansible.builtin.get_url:
-        url: "https://dlcdn.apache.org/tomcat/tomcat-10/v{{ tomcat_version }}/apache-tomcat-{{ tomcat_version }}.tar.gz"
+        url: "https://dlcdn.apache.org/tomcat/tomcat-10/v{{ tomcat_version }}/src/apache-tomcat-{{ tomcat_version }}-src.tar.gz"
         dest: "tmp/apache-tomcat-{{ tomcat_version }}.tar.gz"   
 
 
