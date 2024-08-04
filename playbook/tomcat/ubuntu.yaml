@@ -20,10 +20,25 @@
         home: "{{ home_dir }}"
         shell: "{{ default_shell }}"
         state: present
-    - name: downloading tomcat
-      ansible.builtin.get_url:
-        url: "https://dlcdn.apache.org/tomcat/tomcat-10/v{{ tomcat_version }}/src/apache-tomcat-{{ tomcat_version }}-src.tar.gz"
-        dest: "tmp/apache-tomcat-{{ tomcat_version }}.tar.gz"   
+    - name: download and extract the file
+      ansible.builtin.unarchive:
+        src: "https://www-eu.apache.org/dist/tomcat/tomcat-10/v{{ tomcat_version }}/bin/apache-tomcat-{{ tomcat_version }}.tar.gz"     
+        dest: "{{ home_dir }}"
+        remote_src: yes   
+    - name: create a symbolic link
+      ansible.builtin.file:
+        src: "{{ home_dir }}/apache-tomcat-{{ tomcat_version }}.tar.gz"
+        dest: "{{ home_dir }}/latest/"
+        owner: "{{ user_name }}"
+        group: "{{ group_name }}"
+        state: link 
+    - name: changing ownership to the user
+      ansible.builtin.file:
+        path: "{{ home_dir }}"
+        state: directory
+        recurse: yes
+        owner: "{{ user_name }}"
+        group: "{{ group_name }}"        
 
 
        
