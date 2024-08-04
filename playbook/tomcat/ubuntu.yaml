@@ -28,7 +28,7 @@
     - name: create a symbolic link
       ansible.builtin.file:
         src: "{{ home_dir }}/apache-tomcat-{{ tomcat_version }}.tar.gz"
-        dest: "{{ home_dir }}/latest/"
+        dest: "{{ home_dir }}/latest"
         owner: "{{ user_name }}"
         group: "{{ group_name }}"
         state: link 
