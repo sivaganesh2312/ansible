@@ -20,10 +20,19 @@
         home: "{{ home_dir }}"
         shell: "{{ default_shell }}"
         state: present
+    - name: find stats of tomcat folder
+      ansible.builtin.stat:
+        path: "{{ home_dir }}/apache-tomcat-{{ tomcat_version }}"
+      register: tomcat_folder_stats
+    - name: print stats
+      debug:
+        var: tomcat_folder_stats.stat.exists    
     - name: download and extract the file
       ansible.builtin.unarchive:
         src: "https://dlcdn.apache.org/tomcat/tomcat-10/v{{ tomcat_version }}/bin/apache-tomcat-{{ tomcat_version }}.tar.gz"     
         dest: "{{ home_dir }}"
+        owner: "{{ user_name }}"
+        group: "{{ group_name }}"
         remote_src: yes  
     - name: create a symbolic link
       ansible.builtin.file:
@@ -56,14 +65,20 @@
       ansible.builtin.copy:
         src: tomcat-users.xml
         dest: "{{ home_dir }}/latest/conf/tomcat-users.xml"
+      notify:
+        - restart tomcat  
     - name: configuring manager app
       ansible.builtin.copy:  
         src: manager_context.xml
         dest: "{{ home_dir }}/latest/webapps/manager/META-INF/context.xml"      
+      notify:
+        - restart tomcat  
     - name: configuring host manager app
       ansible.builtin.copy:  
         src: hostmanager_context.xml
         dest: "{{ home_dir }}/latest/webapps/host-manager/META-INF/context.xml"      
+      notify:
+        - restart tomcat   
     - name: restart tomcat
       ansible.builtin.systemd:
         name: tomcat.service
