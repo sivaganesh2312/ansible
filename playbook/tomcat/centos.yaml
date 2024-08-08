@@ -1,14 +1,14 @@
 ---
-- name: install tomcat 10 on ubuntu
-  hosts: ubuntu
+- name: install tomcat 10 on centos
+  hosts: redhat
   become: yes
   tasks:
     - name: check if playbook is executed on supported distribution
       ansible.builtin.fail:
         msg: "This playbook is designed to run only on ubuntu"
-      when: ansible_facts['distribution'] != 'Ubuntu'
+      when: ansible_facts['distribution'] != 'CentOS'
     - name: update packages and install java
-      ansible.builtin.apt:
+      yum:
         name: "{{ java_package }}"
         update_cache: yes
         state: present
