@@ -51,7 +51,7 @@
       ansible.builtin.systemd:
         name: tomcat.service
         enabled: yes
-        state: started         
+        state: started          
            
 
 
